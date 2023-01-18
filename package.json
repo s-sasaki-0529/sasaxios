@@ -1,0 +1,19 @@
+{
+  "name": "saxios",
+  "version": "0.0.1",
+  "description": "Fetch wrapper like Axios API",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s-sasaki-0529/saxios.git"
+  },
+  "author": "s_sasaki_0529",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/s-sasaki-0529/saxios/issues"
+  },
+  "homepage": "https://github.com/s-sasaki-0529/saxios#readme"
+}
