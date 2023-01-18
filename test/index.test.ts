@@ -19,56 +19,49 @@ describe('saxios', () => {
     describe('#get', () => {
       test('basic request', async () => {
         const res = await saxios.request('http://127.0.0.1/')
-        const text = await res.text()
-        expect(text).toEqual('GET /')
+        expect(res.data).toEqual('GET /')
       })
     })
 
     describe('#post', () => {
       test('basic request', async () => {
         const res = await saxios.post('http://127.0.0.1/')
-        const text = await res.text()
-        expect(text).toEqual('POST /')
+        expect(res.data).toEqual('POST /')
       })
     })
 
     describe('#put', () => {
       test('basic request', async () => {
         const res = await saxios.put('http://127.0.0.1/')
-        const text = await res.text()
-        expect(text).toEqual('PUT /')
+        expect(res.data).toEqual('PUT /')
       })
     })
 
     describe('#patch', () => {
       test('basic request', async () => {
         const res = await saxios.patch('http://127.0.0.1/')
-        const text = await res.text()
-        expect(text).toEqual('PATCH /')
+        expect(res.data).toEqual('PATCH /')
       })
     })
 
     describe('#delete', () => {
       test('basic request', async () => {
         const res = await saxios.delete('http://127.0.0.1/')
-        const text = await res.text()
-        expect(text).toEqual('DELETE /')
+        expect(res.data).toEqual('DELETE /')
       })
     })
 
     describe('#head', () => {
       test('basic request', async () => {
         const res = await saxios.head('http://127.0.0.1/')
-        const header = res.headers.get('x-test')
-        expect(header).toEqual('HEAD /')
+        expect(res.headers.get('x-test')).toEqual('HEAD /')
       })
     })
 
     describe('#options', () => {
       test('basic request', async () => {
         const res = await saxios.options('http://127.0.0.1/')
-        const text = await res.text()
-        expect(text).toEqual('OPTIONS /')
+        expect(res.data).toEqual('OPTIONS /')
       })
     })
   })

@@ -1,13 +1,47 @@
+type NativeResponse = Response
+
+type RequestOption = RequestInit & {
+  data?: any
+}
+
+type SaxiosResponse<T = any> = {
+  data: T
+  status: number
+  statusText: string
+  headers: NativeResponse['headers']
+  config: RequestOption
+}
+
+async function parseResponseStream(response: NativeResponse) {
+  const contentType = response.headers.get('content-type')
+  switch (contentType) {
+    case 'application/json':
+      return response.json()
+    case 'text/plain':
+      return response.text()
+    case 'text/html':
+      return response.text()
+    default:
+      return response.blob()
+  }
+}
+
 export function create(defaultRequestInit: RequestInit = {}) {
   /**
    * Call native fetch but throws an error if the status code is not 2xx
    */
-  async function request(input: RequestInfo, init: RequestInit = {}) {
+  async function request(input: RequestInfo, init: RequestInit = {}): Promise<SaxiosResponse> {
     const nativeResponse = await fetch(input, { ...defaultRequestInit, ...init })
     if (!nativeResponse.ok) {
       throw new Error(nativeResponse.statusText, { cause: nativeResponse })
     }
-    return nativeResponse
+    return {
+      data: await parseResponseStream(nativeResponse),
+      status: nativeResponse.status,
+      statusText: nativeResponse.statusText,
+      headers: nativeResponse.headers,
+      config: init
+    }
   }
 
   return {
