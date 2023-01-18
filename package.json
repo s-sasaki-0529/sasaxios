@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/s-sasaki-0529/saxios#readme",
   "devDependencies": {
-    "prettier": "^2.8.3"
+    "prettier": "^2.8.3",
+    "typescript": "^4.9.4"
   },
   "prettier": {
     "semi": false,
