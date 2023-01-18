@@ -1,19 +1,28 @@
-import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
+import { rest, RestHandler } from 'msw'
+import { setupServer } from 'msw/node'
 
-const app = new Hono()
+export const handlers: RestHandler[] = [
+  rest.get('http://127.0.0.1/', (req, res, ctx) => {
+    return res(ctx.body('GET /'))
+  }),
+  rest.post('http://127.0.0.1/', (req, res, ctx) => {
+    return res(ctx.body('POST /'))
+  }),
+  rest.put('http://127.0.0.1/', (req, res, ctx) => {
+    return res(ctx.body('PUT /'))
+  }),
+  rest.patch('http://127.0.0.1/', (req, res, ctx) => {
+    return res(ctx.body('PATCH /'))
+  }),
+  rest.delete('http://127.0.0.1/', (req, res, ctx) => {
+    return res(ctx.body('DELETE /'))
+  }),
+  rest.head('http://127.0.0.1/', (req, res, ctx) => {
+    return res(ctx.set('x-test', 'HEAD /'))
+  }),
+  rest.options('http://127.0.0.1/', (req, res, ctx) => {
+    return res(ctx.body('OPTIONS /'))
+  })
+]
 
-// basic routes
-app.get('/', c => c.text('GET /'))
-app.post('/', c => c.text('POST /'))
-app.put('/', c => c.text('PUT /'))
-app.patch('/', c => c.text('PATCH /'))
-app.delete('/', c => c.text('DELETE /'))
-app.options('/', c => c.text('OPTIONS /'))
-app.head('/', c => {
-  c.header('x-test', 'HEAD /')
-  c.status(200)
-  return c.body('')
-})
-
-serve(app)
+export const server = setupServer(...handlers)

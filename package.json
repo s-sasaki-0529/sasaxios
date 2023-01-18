@@ -17,8 +17,7 @@
   },
   "homepage": "https://github.com/s-sasaki-0529/saxios#readme",
   "devDependencies": {
-    "@hono/node-server": "^0.2.3",
-    "hono": "^2.7.3",
+    "msw": "^0.49.2",
     "prettier": "^2.8.3",
     "tsx": "^3.12.2",
     "typescript": "^4.9.4",
