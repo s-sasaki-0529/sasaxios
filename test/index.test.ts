@@ -3,6 +3,12 @@ import saxios from '../src/index'
 
 describe('saxios', () => {
   describe('basic request methods', () => {
+    test('#request', async () => {
+      const res = await saxios.request('http://127.0.0.1:3000/')
+      const text = await res.text()
+      expect(text).toEqual('GET /')
+    })
+
     test('#get', async () => {
       const res = await saxios.get('http://127.0.0.1:3000/')
       const text = await res.text()
