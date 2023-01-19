@@ -146,7 +146,7 @@ describe('saxios', () => {
     })
   })
 
-  describe('Determine the URL based on the base URL', () => {
+  describe('Determine the URL based on the "baseURL"', () => {
     test('no baseUrl', async () => {
       const saxios = create()
       const res = await saxios.request(`${MOCK_SERVER_BASE_URL}/`)
@@ -157,6 +157,33 @@ describe('saxios', () => {
       const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
       const res = await saxios.request('/')
       expect(res.data).toEqual('GET /')
+    })
+  })
+
+  describe('Append query string from "params" to URL', () => {
+    test('no params', async () => {
+      const res = await saxios.request('/echo-url')
+      expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url`)
+    })
+
+    test('with object params', async () => {
+      const res = await saxios.request('/echo-url', { params: { foo: 'bar', baz: 'qux' } })
+      expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
+    })
+
+    test('with URLSearchParams params', async () => {
+      const res = await saxios.request('/echo-url', { params: new URLSearchParams({ foo: 'bar', baz: 'qux' }) })
+      expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
+    })
+
+    test('direct pass params', async () => {
+      const res = await saxios.request('/echo-url?foo=bar&baz=qux')
+      expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
+    })
+
+    test('direct pass params with object params', async () => {
+      const res = await saxios.request('/echo-url?foo=bar', { params: { baz: 'qux' } })
+      expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
     })
   })
 })

@@ -4,6 +4,7 @@ import { setupServer } from 'msw/node'
 export const MOCK_SERVER_BASE_URL = 'http://127.0.0.1'
 
 export const handlers: RestHandler[] = [
+  // basic endpoints
   rest.get(`${MOCK_SERVER_BASE_URL}/`, (req, res, ctx) => {
     return res(ctx.text('GET /'))
   }),
@@ -24,6 +25,11 @@ export const handlers: RestHandler[] = [
   }),
   rest.options(`${MOCK_SERVER_BASE_URL}/`, (req, res, ctx) => {
     return res(ctx.text('OPTIONS /'))
+  }),
+
+  // echo url endpoint
+  rest.get(`${MOCK_SERVER_BASE_URL}/echo-url`, (req, res, ctx) => {
+    return res(ctx.text(req.url.toString()))
   })
 ]
 

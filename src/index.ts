@@ -1,9 +1,10 @@
 import { parseResponseStream } from './response'
 import type { NativeResponse } from './response'
-import { makeUrl } from './url'
+import { appendQueryString, makeUrl } from './url'
 
 type RequestOption = RequestInit & {
   baseUrl?: string
+  params?: Record<string, any> | URLSearchParams
   data?: any
 }
 
@@ -22,8 +23,9 @@ export function create(defaultRequestOption: RequestOption = {}) {
   async function request(input: RequestInfo, customOptions: RequestOption = {}): Promise<SaxiosResponse> {
     const mergedOptions = { ...defaultRequestOption, ...customOptions }
     const url = makeUrl(input.toString(), mergedOptions.baseUrl)
+    const urlWithParams = appendQueryString(url, mergedOptions.params)
 
-    const nativeResponse = await fetch(url, mergedOptions)
+    const nativeResponse = await fetch(urlWithParams, mergedOptions)
     if (!nativeResponse.ok) {
       throw new Error(nativeResponse.statusText, { cause: nativeResponse })
     }
