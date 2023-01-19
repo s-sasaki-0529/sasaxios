@@ -1,5 +1,6 @@
 import { parseResponseStream } from './response'
 import type { NativeResponse } from './response'
+import { makeUrl } from './url'
 
 type RequestOption = RequestInit & {
   baseUrl?: string
@@ -20,7 +21,7 @@ export function create(defaultRequestOption: RequestOption = {}) {
    */
   async function request(input: RequestInfo, customOptions: RequestOption = {}): Promise<SaxiosResponse> {
     const mergedOptions = { ...defaultRequestOption, ...customOptions }
-    const url = mergedOptions.baseUrl ? new URL(input.toString(), mergedOptions.baseUrl) : input
+    const url = makeUrl(input.toString(), mergedOptions.baseUrl)
 
     const nativeResponse = await fetch(url, mergedOptions)
     if (!nativeResponse.ok) {
