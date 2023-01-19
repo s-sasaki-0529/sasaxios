@@ -1,4 +1,5 @@
-type NativeResponse = Response
+import { parseResponseStream } from './response'
+import type { NativeResponse } from './response'
 
 type RequestOption = RequestInit & {
   data?: any
@@ -10,14 +11,6 @@ type SaxiosResponse<T = any> = {
   statusText: string
   headers: NativeResponse['headers']
   config: RequestOption
-}
-
-async function parseResponseStream(response: NativeResponse) {
-  const contentType = response.headers.get('content-type')
-  if (contentType === null) return response.blob()
-  if (contentType.startsWith('text/')) return response.text()
-  if (contentType === 'application/json') return response.json()
-  return response.blob()
 }
 
 export function create(defaultRequestInit: RequestInit = {}) {
