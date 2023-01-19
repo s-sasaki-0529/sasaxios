@@ -1,7 +1,9 @@
 import { parseResponseStream } from './response'
 import type { NativeResponse } from './response'
+import { urlToHttpOptions } from 'url'
 
 type RequestOption = RequestInit & {
+  baseUrl?: string
   data?: any
 }
 
@@ -18,7 +20,10 @@ export function create(defaultRequestOption: RequestOption = {}) {
    * Call native fetch but throws an error if the status code is not 2xx
    */
   async function request(input: RequestInfo, option: RequestOption = {}): Promise<SaxiosResponse> {
-    const nativeResponse = await fetch(input, { ...defaultRequestOption, ...option })
+    const mergedOptions = { ...defaultRequestOption, ...option }
+    const url = mergedOptions.baseUrl ? new URL(input.toString(), mergedOptions.baseUrl) : input
+
+    const nativeResponse = await fetch(url, mergedOptions)
     if (!nativeResponse.ok) {
       throw new Error(nativeResponse.statusText, { cause: nativeResponse })
     }
