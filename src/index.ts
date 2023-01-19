@@ -13,12 +13,12 @@ type SaxiosResponse<T = any> = {
   config: RequestOption
 }
 
-export function create(defaultRequestInit: RequestInit = {}) {
+export function create(defaultRequestOption: RequestOption = {}) {
   /**
    * Call native fetch but throws an error if the status code is not 2xx
    */
-  async function request(input: RequestInfo, init: RequestInit = {}): Promise<SaxiosResponse> {
-    const nativeResponse = await fetch(input, { ...defaultRequestInit, ...init })
+  async function request(input: RequestInfo, option: RequestOption = {}): Promise<SaxiosResponse> {
+    const nativeResponse = await fetch(input, { ...defaultRequestOption, ...option })
     if (!nativeResponse.ok) {
       throw new Error(nativeResponse.statusText, { cause: nativeResponse })
     }
@@ -27,7 +27,7 @@ export function create(defaultRequestInit: RequestInit = {}) {
       status: nativeResponse.status,
       statusText: nativeResponse.statusText,
       headers: nativeResponse.headers,
-      config: init
+      config: option
     }
   }
 
@@ -35,26 +35,26 @@ export function create(defaultRequestInit: RequestInit = {}) {
    * Shortcut methods like axios
    */
   const shortcutMethods = {
-    get: (input: RequestInfo, init: RequestInit = {}) => {
-      return request(input, { ...init, method: 'GET' })
+    get: (input: RequestInfo, option: RequestOption = {}) => {
+      return request(input, { ...option, method: 'GET' })
     },
-    post: (input: RequestInfo, init: RequestInit = {}) => {
-      return request(input, { ...init, method: 'POST' })
+    post: (input: RequestInfo, option: RequestOption = {}) => {
+      return request(input, { ...option, method: 'POST' })
     },
-    put: (input: RequestInfo, init: RequestInit = {}) => {
-      return request(input, { ...init, method: 'PUT' })
+    put: (input: RequestInfo, option: RequestOption = {}) => {
+      return request(input, { ...option, method: 'PUT' })
     },
-    patch: (input: RequestInfo, init: RequestInit = {}) => {
-      return request(input, { ...init, method: 'PATCH' })
+    patch: (input: RequestInfo, option: RequestOption = {}) => {
+      return request(input, { ...option, method: 'PATCH' })
     },
-    delete: (input: RequestInfo, init: RequestInit = {}) => {
-      return request(input, { ...init, method: 'DELETE' })
+    delete: (input: RequestInfo, option: RequestOption = {}) => {
+      return request(input, { ...option, method: 'DELETE' })
     },
-    head: (input: RequestInfo, init: RequestInit = {}) => {
-      return request(input, { ...init, method: 'HEAD' })
+    head: (input: RequestInfo, option: RequestOption = {}) => {
+      return request(input, { ...option, method: 'HEAD' })
     },
-    options: (input: RequestInfo, init: RequestInit = {}) => {
-      return request(input, { ...init, method: 'OPTIONS' })
+    options: (input: RequestInfo, option: RequestOption = {}) => {
+      return request(input, { ...option, method: 'OPTIONS' })
     }
   }
 
