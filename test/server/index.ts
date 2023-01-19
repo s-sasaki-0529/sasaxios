@@ -1,8 +1,6 @@
 import { rest, RestHandler } from 'msw'
 import { setupServer } from 'msw/node'
 
-const methods = ['get', 'post', 'put', 'patch', 'delete', 'head', 'options'] as const
-
 export const handlers: RestHandler[] = [
   rest.get('http://127.0.0.1/', (req, res, ctx) => {
     return res(ctx.text('GET /'))
