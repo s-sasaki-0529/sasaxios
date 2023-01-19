@@ -1,7 +1,18 @@
+export type QueryString = Record<string, any> | URLSearchParams
+
 /**
- *  make URL based on the baseUrl
+ * make full URL that includes baseURL and query string
  */
-export function makeUrl(url: string, baseUrl?: string) {
+export function makeFullUrl(url: string, options?: { baseUrl?: string; params?: QueryString }) {
+  const { baseUrl, params } = options || {}
+  const fullUrl = insertBaseURL(url, baseUrl)
+  return appendQueryString(fullUrl, params)
+}
+
+/**
+ *  insert baseURL to URL if baseURL is specified
+ */
+function insertBaseURL(url: string, baseUrl?: string) {
   if (baseUrl) {
     return new URL(url, baseUrl).toString()
   }
@@ -11,7 +22,7 @@ export function makeUrl(url: string, baseUrl?: string) {
 /**
  * append query string to URL
  */
-export function appendQueryString(url: string, params?: Record<string, any> | URLSearchParams) {
+function appendQueryString(url: string, params?: QueryString) {
   if (!params) return url
   const searchParams = new URLSearchParams(params)
 
