@@ -161,22 +161,22 @@ describe('saxios', () => {
   })
 
   describe('Append query string from "params" to URL', () => {
-    test('no params', async () => {
+    test('params is undefined', async () => {
       const res = await saxios.request('/echo-url')
       expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url`)
     })
 
-    test('with object params', async () => {
+    test('params is object', async () => {
       const res = await saxios.request('/echo-url', { params: { foo: 'bar', baz: 'qux' } })
       expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
     })
 
-    test('with URLSearchParams params', async () => {
+    test('params is URLSearchParams', async () => {
       const res = await saxios.request('/echo-url', { params: new URLSearchParams({ foo: 'bar', baz: 'qux' }) })
       expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
     })
 
-    test('direct pass params', async () => {
+    test('direct pass params to URL', async () => {
       const res = await saxios.request('/echo-url?foo=bar&baz=qux')
       expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
     })
