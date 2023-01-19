@@ -99,4 +99,48 @@ describe('saxios', () => {
       await expect(saxios.request('http://127.0.0.1/')).rejects.toThrow('Internal Server Error')
     })
   })
+
+  describe('Automatically parse the response based on the Content-Type', () => {
+    function mockContentType(contentType: string, data: string) {
+      server.use(
+        rest.get('http://127.0.0.1/', (req, res, ctx) => {
+          return res.once(ctx.set('content-type', contentType), ctx.body(data))
+        })
+      )
+    }
+
+    test('application/json', async () => {
+      mockContentType('application/json', '{"foo":"bar"}')
+
+      const res = await saxios.request('http://127.0.0.1/')
+      expect(res.headers.get('content-type')).toEqual('application/json')
+      expect(res.data).toEqual({ foo: 'bar' })
+    })
+
+    test('text/plain', async () => {
+      mockContentType('text/plain', '{"foo":"bar"}')
+
+      const res = await saxios.request('http://127.0.0.1/')
+      expect(res.headers.get('content-type')).toEqual('text/plain')
+      expect(res.data).toEqual('{"foo":"bar"}')
+    })
+
+    test('text/html', async () => {
+      mockContentType('text/html', '<html><body>foo</body></html>')
+
+      const res = await saxios.request('http://127.0.0.1/')
+      expect(res.headers.get('content-type')).toEqual('text/html')
+      expect(res.data).toEqual('<html><body>foo</body></html>')
+    })
+
+    test('others', async () => {
+      mockContentType('application/octet-stream', 'foo')
+
+      const res = await saxios.request('http://127.0.0.1/')
+      const text = await res.data.text()
+      expect(res.headers.get('content-type')).toEqual('application/octet-stream')
+      expect(res.data.type).toEqual('application/octet-stream')
+      expect(text).toEqual('foo')
+    })
+  })
 })

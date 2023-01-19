@@ -14,16 +14,10 @@ type SaxiosResponse<T = any> = {
 
 async function parseResponseStream(response: NativeResponse) {
   const contentType = response.headers.get('content-type')
-  switch (contentType) {
-    case 'application/json':
-      return response.json()
-    case 'text/plain':
-      return response.text()
-    case 'text/html':
-      return response.text()
-    default:
-      return response.blob()
-  }
+  if (contentType === null) return response.blob()
+  if (contentType.startsWith('text/')) return response.text()
+  if (contentType === 'application/json') return response.json()
+  return response.blob()
 }
 
 export function create(defaultRequestInit: RequestInit = {}) {
