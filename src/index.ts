@@ -31,8 +31,10 @@ export function create(defaultRequestInit: RequestInit = {}) {
     }
   }
 
-  return {
-    request,
+  /**
+   * Shortcut methods like axios
+   */
+  const shortcutMethods = {
     get: (input: RequestInfo, init: RequestInit = {}) => {
       return request(input, { ...init, method: 'GET' })
     },
@@ -54,6 +56,11 @@ export function create(defaultRequestInit: RequestInit = {}) {
     options: (input: RequestInfo, init: RequestInit = {}) => {
       return request(input, { ...init, method: 'OPTIONS' })
     }
+  }
+
+  return {
+    request,
+    ...shortcutMethods
   }
 }
 
