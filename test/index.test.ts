@@ -145,4 +145,18 @@ describe('saxios', () => {
       expect(text).toEqual('foo')
     })
   })
+
+  describe('Determine the URL based on the base URL', () => {
+    test('no baseUrl', async () => {
+      const saxios = create()
+      const res = await saxios.request(`${MOCK_SERVER_BASE_URL}/`)
+      expect(res.data).toEqual('GET /')
+    })
+
+    test('with baseUrl', async () => {
+      const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+      const res = await saxios.request('/')
+      expect(res.data).toEqual('GET /')
+    })
+  })
 })
