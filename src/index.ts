@@ -1,38 +1,49 @@
-import { parseResponseStream } from './response'
-import type { NativeResponse } from './response'
+import { parseResponseStream } from './nativeResponse'
+import type { NativeResponse } from './nativeResponse'
 import { makeFullUrl } from './url'
 import { makeRequestBody } from './requestBody'
 
-type RequestOption = RequestInit & {
+export type SaxiosURL = URL | string
+export type SaxiosHeaders = Record<string, string> | Headers
+
+export type SaxiosRequest = {
   baseUrl?: string
+  method?: 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options'
   params?: Record<string, any> | URLSearchParams
   data?: any
+  headers?: SaxiosHeaders
 }
 
-type SaxiosResponse<T = any> = {
+export type SaxiosResponse<T = any> = {
   data: T
   status: number
   statusText: string
   headers: NativeResponse['headers']
-  config: RequestOption
+  config: SaxiosRequest
 }
 
-export function create(defaultRequestOption: RequestOption = {}) {
+export function create(defaultRequestOption: SaxiosRequest = {}) {
   /**
-   * Call native fetch but throws an error if the status code is not 2xx
+   * Call native fetch
    */
-  async function request(input: RequestInfo, customOptions: RequestOption = {}): Promise<SaxiosResponse> {
+  async function request(url: SaxiosURL, customOptions: SaxiosRequest = {}): Promise<SaxiosResponse> {
     const options = { ...defaultRequestOption, ...customOptions }
-    const url = makeFullUrl(input.toString(), { baseUrl: options.baseUrl, params: options.params })
+    const fullUrl = makeFullUrl(url.toString(), { baseUrl: options.baseUrl, params: options.params })
 
-    if (options.data && !options.body) {
-      options.body = makeRequestBody(options.data, options.headers?.['content-type'] || '')
+    // transform saxios request to native fetch request
+    const nativeRequest: RequestInit = {
+      method: options.method?.toUpperCase() || 'GET',
+      body: makeRequestBody(options.data, options.headers?.['content-type'] || ''),
+      headers: options.headers
     }
 
-    const nativeResponse = await fetch(url, options)
+    // Call native fetch but throws an error if the status code is not 2x
+    const nativeResponse = await fetch(fullUrl, nativeRequest)
     if (!nativeResponse.ok) {
       throw new Error(nativeResponse.statusText, { cause: nativeResponse })
     }
+
+    // transform native fetch response to saxios response
     return {
       data: await parseResponseStream(nativeResponse),
       status: nativeResponse.status,
@@ -46,26 +57,26 @@ export function create(defaultRequestOption: RequestOption = {}) {
    * Shortcut methods like axios
    */
   const shortcutMethods = {
-    get: (input: RequestInfo, customOptions: RequestOption = {}) => {
-      return request(input, { ...customOptions, method: 'GET' })
+    get: (url: SaxiosURL, customOptions: SaxiosRequest = {}) => {
+      return request(url, { ...customOptions, method: 'get' })
     },
-    post: (input: RequestInfo, data: any, customOptions: RequestOption = {}) => {
-      return request(input, { ...customOptions, data, method: 'POST' })
+    post: (url: SaxiosURL, data: any, customOptions: SaxiosRequest = {}) => {
+      return request(url, { ...customOptions, data, method: 'post' })
     },
-    put: (input: RequestInfo, data: any, customOptions: RequestOption = {}) => {
-      return request(input, { ...customOptions, data, method: 'PUT' })
+    put: (url: SaxiosURL, data: any, customOptions: SaxiosRequest = {}) => {
+      return request(url, { ...customOptions, data, method: 'put' })
     },
-    patch: (input: RequestInfo, data: any, customOptions: RequestOption = {}) => {
-      return request(input, { ...customOptions, data, method: 'PATCH' })
+    patch: (url: SaxiosURL, data: any, customOptions: SaxiosRequest = {}) => {
+      return request(url, { ...customOptions, data, method: 'patch' })
     },
-    delete: (input: RequestInfo, customOptions: RequestOption = {}) => {
-      return request(input, { ...customOptions, method: 'DELETE' })
+    delete: (url: SaxiosURL, customOptions: SaxiosRequest = {}) => {
+      return request(url, { ...customOptions, method: 'delete' })
     },
-    head: (input: RequestInfo, customOptions: RequestOption = {}) => {
-      return request(input, { ...customOptions, method: 'HEAD' })
+    head: (url: SaxiosURL, customOptions: SaxiosRequest = {}) => {
+      return request(url, { ...customOptions, method: 'head' })
     },
-    options: (input: RequestInfo, customOptions: RequestOption = {}) => {
-      return request(input, { ...customOptions, method: 'OPTIONS' })
+    options: (url: SaxiosURL, customOptions: SaxiosRequest = {}) => {
+      return request(url, { ...customOptions, method: 'options' })
     }
   }
 

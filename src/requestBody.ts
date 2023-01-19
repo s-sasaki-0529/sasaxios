@@ -2,6 +2,7 @@
  * make request body data according to the content-type
  */
 export function makeRequestBody(data: any, contentType?: string) {
+  if (!data) return undefined
   if (!contentType) return data
   if (contentType.startsWith('text/')) return data.toString()
 
