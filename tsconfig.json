@@ -11,6 +11,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "skipLibCheck": true,
     "noEmit": false,
+    "declaration": true,
     "emitDeclarationOnly": true,
     "declarationMap": true,
     "declarationDir": "./dist",
