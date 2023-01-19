@@ -28,8 +28,14 @@ export const handlers: RestHandler[] = [
   }),
 
   // echo url endpoint
-  rest.get(`${MOCK_SERVER_BASE_URL}/echo-url`, (req, res, ctx) => {
+  rest.all(`${MOCK_SERVER_BASE_URL}/echo-url`, (req, res, ctx) => {
     return res(ctx.text(req.url.toString()))
+  }),
+
+  // echo request body endpoint
+  rest.all(`${MOCK_SERVER_BASE_URL}/echo-body`, async (req, res, ctx) => {
+    const body = await req.text()
+    return res(ctx.text(body))
   })
 ]
 

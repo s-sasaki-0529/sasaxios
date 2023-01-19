@@ -25,17 +25,17 @@ describe('saxios', () => {
     })
 
     test('#post', async () => {
-      const res = await saxios.post('/')
+      const res = await saxios.post('/', {})
       expect(res.data).toEqual('POST /')
     })
 
     test('#put', async () => {
-      const res = await saxios.put('/')
+      const res = await saxios.put('/', {})
       expect(res.data).toEqual('PUT /')
     })
 
     test('#patch', async () => {
-      const res = await saxios.patch('/')
+      const res = await saxios.patch('/', {})
       expect(res.data).toEqual('PATCH /')
     })
 
@@ -184,6 +184,23 @@ describe('saxios', () => {
     test('direct pass params with object params', async () => {
       const res = await saxios.request('/echo-url?foo=bar', { params: { baz: 'qux' } })
       expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
+    })
+  })
+
+  describe('Make request body from "data" param', () => {
+    test('data is undefined', async () => {
+      const res = await saxios.post('/echo-body', undefined)
+      expect(res.data).toEqual('')
+    })
+
+    test('data is text/plain', async () => {
+      const res = await saxios.post('/echo-body', 'foo', { headers: { 'content-type': 'text/plain' } })
+      expect(res.data).toEqual('foo')
+    })
+
+    test('data is application/json', async () => {
+      const res = await saxios.post('/echo-body', { foo: 'bar' }, { headers: { 'content-type': 'application/json' } })
+      expect(res.data).toEqual('{"foo":"bar"}')
     })
   })
 })

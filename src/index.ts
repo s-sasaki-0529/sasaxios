@@ -1,6 +1,7 @@
 import { parseResponseStream } from './response'
 import type { NativeResponse } from './response'
 import { makeFullUrl } from './url'
+import { makeRequestBody } from './requestBody'
 
 type RequestOption = RequestInit & {
   baseUrl?: string
@@ -21,10 +22,14 @@ export function create(defaultRequestOption: RequestOption = {}) {
    * Call native fetch but throws an error if the status code is not 2xx
    */
   async function request(input: RequestInfo, customOptions: RequestOption = {}): Promise<SaxiosResponse> {
-    const mergedOptions = { ...defaultRequestOption, ...customOptions }
-    const url = makeFullUrl(input.toString(), { baseUrl: mergedOptions.baseUrl, params: mergedOptions.params })
+    const options = { ...defaultRequestOption, ...customOptions }
+    const url = makeFullUrl(input.toString(), { baseUrl: options.baseUrl, params: options.params })
 
-    const nativeResponse = await fetch(url, mergedOptions)
+    if (options.data && !options.body) {
+      options.body = makeRequestBody(options.data, options.headers?.['content-type'] || '')
+    }
+
+    const nativeResponse = await fetch(url, options)
     if (!nativeResponse.ok) {
       throw new Error(nativeResponse.statusText, { cause: nativeResponse })
     }
@@ -44,14 +49,14 @@ export function create(defaultRequestOption: RequestOption = {}) {
     get: (input: RequestInfo, customOptions: RequestOption = {}) => {
       return request(input, { ...customOptions, method: 'GET' })
     },
-    post: (input: RequestInfo, customOptions: RequestOption = {}) => {
-      return request(input, { ...customOptions, method: 'POST' })
+    post: (input: RequestInfo, data: any, customOptions: RequestOption = {}) => {
+      return request(input, { ...customOptions, data, method: 'POST' })
     },
-    put: (input: RequestInfo, customOptions: RequestOption = {}) => {
-      return request(input, { ...customOptions, method: 'PUT' })
+    put: (input: RequestInfo, data: any, customOptions: RequestOption = {}) => {
+      return request(input, { ...customOptions, data, method: 'PUT' })
     },
-    patch: (input: RequestInfo, customOptions: RequestOption = {}) => {
-      return request(input, { ...customOptions, method: 'PATCH' })
+    patch: (input: RequestInfo, data: any, customOptions: RequestOption = {}) => {
+      return request(input, { ...customOptions, data, method: 'PATCH' })
     },
     delete: (input: RequestInfo, customOptions: RequestOption = {}) => {
       return request(input, { ...customOptions, method: 'DELETE' })
