@@ -4,7 +4,7 @@
   "description": "Fetch wrapper like Axios API",
   "main": "dist/index.js",
   "scripts": {
-    "test": "vitest",
+    "test": "vitest --reporter verbose",
     "lint": "eslint"
   },
   "repository": {
