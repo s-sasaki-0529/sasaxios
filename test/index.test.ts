@@ -113,7 +113,7 @@ describe('saxios', () => {
 
   describe('Shortcut methods', () => {
     test('#get is available', async () => {
-      const res = await saxios.request('/')
+      const res = await saxios.get('/')
       expect(res.data).toEqual('GET /')
     })
 
@@ -163,7 +163,42 @@ describe('saxios', () => {
       })
     })
 
-    //describe.skip('method', () => {})
+    describe('method', () => {
+      test('GET', async () => {
+        const res = await saxios.request('/', { method: 'get' })
+        expect(res.data).toEqual('GET /')
+      })
+
+      test('POST', async () => {
+        const res = await saxios.request('/', { method: 'post' })
+        expect(res.data).toEqual('POST /')
+      })
+
+      test('PUT', async () => {
+        const res = await saxios.request('/', { method: 'put' })
+        expect(res.data).toEqual('PUT /')
+      })
+
+      test('PATCH', async () => {
+        const res = await saxios.request('/', { method: 'patch' })
+        expect(res.data).toEqual('PATCH /')
+      })
+
+      test('DELETE', async () => {
+        const res = await saxios.request('/', { method: 'delete' })
+        expect(res.data).toEqual('DELETE /')
+      })
+
+      test('HEAD', async () => {
+        const res = await saxios.request('/', { method: 'head' })
+        expect(res.headers.get('x-test')).toEqual('HEAD /')
+      })
+
+      test('OPTIONS', async () => {
+        const res = await saxios.request('/', { method: 'options' })
+        expect(res.data).toEqual('OPTIONS /')
+      })
+    })
 
     describe('params', () => {
       test('params is undefined', async () => {
@@ -218,7 +253,6 @@ describe('saxios', () => {
 
       test('headers is object', async () => {
         const res = await saxios.request('/echo-headers', { headers: { foo: 'bar', baz: 'qux' } })
-        console.log(res.data)
         expect(res.data.foo).toEqual('bar')
         expect(res.data.baz).toEqual('qux')
       })
