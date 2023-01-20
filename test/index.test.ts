@@ -209,7 +209,26 @@ describe('saxios', () => {
       })
     })
 
-    //describe.skip('headers', () => {})
+    describe('headers', () => {
+      test('headers is undefined', async () => {
+        const res = await saxios.request('/echo-headers')
+        expect(res.data.foo).toBeUndefined()
+        expect(res.data.baz).toBeUndefined()
+      })
+
+      test('headers is object', async () => {
+        const res = await saxios.request('/echo-headers', { headers: { foo: 'bar', baz: 'qux' } })
+        console.log(res.data)
+        expect(res.data.foo).toEqual('bar')
+        expect(res.data.baz).toEqual('qux')
+      })
+
+      test('headers is Headers instance', async () => {
+        const res = await saxios.request('/echo-headers', { headers: new Headers({ foo: 'bar', baz: 'qux' }) })
+        expect(res.data.foo).toEqual('bar')
+        expect(res.data.baz).toEqual('qux')
+      })
+    })
 
     // NOTE: node-fetch is not support credentials option.
     // eslint-disable-next-line no-restricted-properties

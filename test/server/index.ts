@@ -38,6 +38,12 @@ export const handlers: RestHandler[] = [
     return res(ctx.text(body))
   }),
 
+  // echo request headers endpoint
+  rest.all(`${MOCK_SERVER_BASE_URL}/echo-headers`, (req, res, ctx) => {
+    const headers = req.headers.all()
+    return res(ctx.json(JSON.parse(JSON.stringify(headers))))
+  }),
+
   // set cookie endpoint
   rest.all(`${MOCK_SERVER_BASE_URL}/set-cookie`, (req, res, ctx) => {
     return res(ctx.cookie('foo', 'bar'))
