@@ -12,6 +12,7 @@ export type SaxiosRequest = {
   params?: Record<string, any> | URLSearchParams
   data?: any
   headers?: SaxiosHeaders
+  withCredentials?: boolean // NOTE: not supported same-origin
 }
 
 export type SaxiosResponse<T = any> = {
@@ -34,7 +35,8 @@ export function create(defaultRequestOption: SaxiosRequest = {}) {
     const nativeRequest: RequestInit = {
       method: options.method?.toUpperCase() || 'GET',
       body: makeRequestBody(options.data, options.headers?.['content-type'] || ''),
-      headers: options.headers
+      headers: options.headers,
+      credentials: options.withCredentials ? 'include' : 'omit'
     }
 
     // Call native fetch but throws an error if the status code is not 2x

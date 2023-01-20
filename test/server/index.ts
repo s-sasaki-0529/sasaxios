@@ -36,6 +36,11 @@ export const handlers: RestHandler[] = [
   rest.all(`${MOCK_SERVER_BASE_URL}/echo-body`, async (req, res, ctx) => {
     const body = await req.text()
     return res(ctx.text(body))
+  }),
+
+  // set cookie endpoint
+  rest.all(`${MOCK_SERVER_BASE_URL}/set-cookie`, (req, res, ctx) => {
+    return res(ctx.cookie('foo', 'bar'))
   })
 ]
 

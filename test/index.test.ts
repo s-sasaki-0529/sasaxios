@@ -163,7 +163,7 @@ describe('saxios', () => {
       })
     })
 
-    describe.skip('method', () => {})
+    //describe.skip('method', () => {})
 
     describe('params', () => {
       test('params is undefined', async () => {
@@ -209,8 +209,22 @@ describe('saxios', () => {
       })
     })
 
-    describe.skip('headers', () => {})
+    //describe.skip('headers', () => {})
 
-    describe.skip('withCredentials', () => {})
+    // NOTE: node-fetch is not support credentials option.
+    // eslint-disable-next-line no-restricted-properties
+    describe.skip('withCredentials', () => {
+      test('true', async () => {
+        await saxios.request('/set-cookie', { withCredentials: true })
+        const res = await saxios.request('/set-cookie', { withCredentials: true })
+        expect(res.headers.get('set-cookie')).toEqual('foo=bar')
+      })
+
+      test('false', async () => {
+        await saxios.request('/set-cookie', { withCredentials: true })
+        const res = await saxios.request('/set-cookie', { withCredentials: true })
+        expect(res.headers.get('set-cookie')).toBeFalsy()
+      })
+    })
   })
 })
