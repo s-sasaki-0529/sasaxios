@@ -16,6 +16,7 @@
     "declarationMap": true,
     "declarationDir": "./dist",
     "moduleResolution": "node",
+    "outDir": "dist"
   },
   "include": ["src/**/*"],
 }
