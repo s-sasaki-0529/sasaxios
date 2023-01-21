@@ -1,50 +1,7 @@
 import { parseResponseStream } from './nativeResponse'
-import type { NativeResponse } from './nativeResponse'
 import { makeFullUrl } from './url'
 import { makeRequestBody } from './requestBody'
-
-export type SaxiosURL = URL | string
-export type SaxiosHeaders = Record<string, string> | Headers
-
-export type SaxiosRequest = {
-  // url
-  method?: 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options'
-  baseUrl?: string
-  // transformRequest
-  // transformResponse
-  headers?: SaxiosHeaders
-  params?: Record<string, any> | URLSearchParams
-  // paramsSerializer
-  data?: any
-  // timeout
-  withCredentials?: boolean // NOTE: not supported same-origin
-  // adapter
-  // auth
-  // responseType
-  // responseEncoding
-  // xsrfCookieName
-  // xsrfHeaderName
-  // onUploadProgress
-  // onDownloadProgress
-  // maxContentLength
-  // maxBodyLength
-  // validateStatus
-  // maxRedirects
-  // socketPath
-  // httpAgent
-  // httpsAgent
-  // proxy
-  // cancelToken
-  // decompress
-}
-
-export type SaxiosResponse<T = any> = {
-  data: T
-  status: number
-  statusText: string
-  headers: NativeResponse['headers']
-  config: SaxiosRequest
-}
+import { SaxiosRequest, SaxiosResponse, SaxiosURL } from './type'
 
 export function create(defaultRequestOption: SaxiosRequest = {}) {
   /**
@@ -104,6 +61,8 @@ export function create(defaultRequestOption: SaxiosRequest = {}) {
       return request(url, { ...customOptions, method: 'options' })
     }
   }
+
+  // request/response interceptors
 
   return {
     request,
