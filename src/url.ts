@@ -25,9 +25,14 @@ function insertBaseURL(url: string, baseURL?: string) {
 function appendQueryString(url: string, params?: QueryString) {
   if (!params) return url
 
-  // remove null/undefined value to prevent serialize to 'null' or 'undefined'
+  // remove empty values
   for (const param of Object.keys(params)) {
-    if (params[param] == null || params[param] === undefined) {
+    const v = params[param]
+    if (v === null || v === undefined) {
+      delete params[param]
+    } else if (typeof v === 'object' && Object.keys(v).length === 0) {
+      delete params[param]
+    } else if (Array.isArray(v) && v.length === 0) {
       delete params[param]
     }
   }
