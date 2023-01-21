@@ -3,6 +3,7 @@ import { makeFullUrl } from './url'
 import { makeRequestBody } from './requestBody'
 import { SasaxiosRequest, SasaxiosResponse, SasaxiosURL } from './type'
 import { createRequestInterceptorManager, createResponseInterceptorManager } from './interceptor'
+export * as types from './type'
 
 export function create(defaultRequestOption: SasaxiosRequest = {}) {
   /**
