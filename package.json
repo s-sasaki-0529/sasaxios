@@ -1,6 +1,6 @@
 {
-  "name": "saxios",
-  "version": "0.0.1",
+  "name": "@shingo.sasaki/saxios",
+  "version": "0.0.2",
   "description": "Fetch wrapper like Axios API",
   "source": "src/saxios.ts",
   "main": "dist/saxios.js",
