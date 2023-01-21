@@ -1,5 +1,5 @@
 export type SasaxiosURL = URL | string
-export type SasaxiosHeaders = Record<string, string> | Headers
+export type SasaxiosHeaders = Record<string, any>
 
 export type SasaxiosRequest = {
   method?: 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options'
