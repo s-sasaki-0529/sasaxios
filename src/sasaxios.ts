@@ -59,17 +59,6 @@ function create(defaultRequestOption: SasaxiosRequest = {}) {
       // Call native fetch
       const nativeResponse = await fetch(fullUrl, nativeRequestConfig)
 
-      // if native fetch is success but response status is not 2xx, throw error
-      if (!nativeResponse.ok) {
-        const error = new Error(nativeResponse.statusText, { cause: nativeResponse })
-        for (const interceptor of responseInterceptor.handlers) {
-          if (interceptor.rejected) {
-            await interceptor.rejected(error)
-          }
-        }
-        throw error
-      }
-
       // transform native fetch response to saxios response
       const response = {
         data: await parseResponseStream(nativeResponse),
@@ -77,6 +66,21 @@ function create(defaultRequestOption: SasaxiosRequest = {}) {
         statusText: nativeResponse.statusText,
         headers: nativeResponse.headers,
         config: customOptions
+      }
+
+      // if native fetch is success but response status is not 2xx, throw error
+      if (!nativeResponse.ok) {
+        const errorInfo = {
+          request: options,
+          response: response,
+          message: response.data || response.status
+        }
+        for (const interceptor of responseInterceptor.handlers) {
+          if (interceptor.rejected) {
+            await interceptor.rejected(errorInfo)
+          }
+        }
+        throw errorInfo
       }
 
       // Call response interceptors after fetch

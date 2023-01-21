@@ -44,27 +44,27 @@ describe('saxios', () => {
 
       test('301', async () => {
         mockStatusCode(301)
-        await expect(saxios.request('/')).rejects.toThrow('Moved Permanently')
+        await expect(saxios.request('/')).rejects.toThrow('GET /')
       })
 
       test('400', async () => {
         mockStatusCode(400)
-        await expect(saxios.request('/')).rejects.toThrow('Bad Request')
+        await expect(saxios.request('/')).rejects.toThrow('GET /')
       })
 
       test('403', async () => {
         mockStatusCode(403)
-        await expect(saxios.request('/')).rejects.toThrow('Forbidden')
+        await expect(saxios.request('/')).rejects.toThrow('GET /')
       })
 
       test('404', async () => {
         mockStatusCode(404)
-        await expect(saxios.request('/')).rejects.toThrow('Not Found')
+        await expect(saxios.request('/')).rejects.toThrow('GET /')
       })
 
       test('500', async () => {
         mockStatusCode(500)
-        await expect(saxios.request('/')).rejects.toThrow('Internal Server Error')
+        await expect(saxios.request('/')).rejects.toThrow('GET /')
       })
     })
 
