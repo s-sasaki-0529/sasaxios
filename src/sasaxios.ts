@@ -51,6 +51,18 @@ export function create(defaultRequestOption: SasaxiosRequest = {}) {
       }
     }
 
+    // Set default content-type
+    if (!options.headers) {
+      options.headers = {}
+    }
+    if (options.headers['content-type'] === undefined) {
+      if (isJSONContent(options.data)) {
+        options.headers['content-type'] = 'application/json'
+      } else {
+        options.headers['content-type'] = 'text/plain'
+      }
+    }
+
     // Transform saxios request to native fetch request
     const nativeRequestConfig: RequestInit = {
       method: options.method?.toUpperCase() || 'GET',
