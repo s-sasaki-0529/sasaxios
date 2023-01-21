@@ -7,12 +7,35 @@ export type SaxiosURL = URL | string
 export type SaxiosHeaders = Record<string, string> | Headers
 
 export type SaxiosRequest = {
-  baseUrl?: string
+  // url
   method?: 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options'
-  params?: Record<string, any> | URLSearchParams
-  data?: any
+  baseUrl?: string
+  // transformRequest
+  // transformResponse
   headers?: SaxiosHeaders
+  params?: Record<string, any> | URLSearchParams
+  // paramsSerializer
+  data?: any
+  // timeout
   withCredentials?: boolean // NOTE: not supported same-origin
+  // adapter
+  // auth
+  // responseType
+  // responseEncoding
+  // xsrfCookieName
+  // xsrfHeaderName
+  // onUploadProgress
+  // onDownloadProgress
+  // maxContentLength
+  // maxBodyLength
+  // validateStatus
+  // maxRedirects
+  // socketPath
+  // httpAgent
+  // httpsAgent
+  // proxy
+  // cancelToken
+  // decompress
 }
 
 export type SaxiosResponse<T = any> = {
