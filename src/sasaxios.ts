@@ -13,13 +13,13 @@ export function create(defaultRequestOption: SasaxiosRequest = {}) {
     get: (url: SasaxiosURL, customOptions: SasaxiosRequest = {}) => {
       return request(url, { ...customOptions, method: 'get' })
     },
-    post: (url: SasaxiosURL, data: any, customOptions: SasaxiosRequest = {}) => {
+    post: (url: SasaxiosURL, data?: any, customOptions: SasaxiosRequest = {}) => {
       return request(url, { ...customOptions, data, method: 'post' })
     },
-    put: (url: SasaxiosURL, data: any, customOptions: SasaxiosRequest = {}) => {
+    put: (url: SasaxiosURL, data?: any, customOptions: SasaxiosRequest = {}) => {
       return request(url, { ...customOptions, data, method: 'put' })
     },
-    patch: (url: SasaxiosURL, data: any, customOptions: SasaxiosRequest = {}) => {
+    patch: (url: SasaxiosURL, data?: any, customOptions: SasaxiosRequest = {}) => {
       return request(url, { ...customOptions, data, method: 'patch' })
     },
     delete: (url: SasaxiosURL, customOptions: SasaxiosRequest = {}) => {
