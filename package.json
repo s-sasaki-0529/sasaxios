@@ -1,6 +1,6 @@
 {
   "name": "sasaxios",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Fetch wrapper like Axios API",
   "source": "src/sasaxios.ts",
   "main": "dist/sasaxios.js",
