@@ -5,7 +5,7 @@ import { SasaxiosRequest, SasaxiosResponse, SasaxiosURL } from './type'
 import { createRequestInterceptorManager, createResponseInterceptorManager } from './interceptor'
 export * from './type'
 
-export function create(defaultRequestOption: SasaxiosRequest = {}) {
+function create(defaultRequestOption: SasaxiosRequest = {}) {
   /**
    * Shortcut methods
    */
@@ -99,6 +99,7 @@ export function create(defaultRequestOption: SasaxiosRequest = {}) {
   }
 
   return {
+    create,
     request,
     interceptors: {
       request: requestInterceptor,
