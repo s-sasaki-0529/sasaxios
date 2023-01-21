@@ -1,5 +1,6 @@
 export type SaxiosURL = URL | string
 export type SaxiosHeaders = Record<string, string> | Headers
+
 export type SaxiosRequest = {
   method?: 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options'
   baseUrl?: string
@@ -15,6 +16,3 @@ export type SaxiosResponse<T = any> = {
   headers: Response['headers']
   config: SaxiosRequest
 }
-export type SaxiosInterceptor<V> = (value: V) => V | Promise<V>
-export type SaxiosRequestInterceptor = SaxiosInterceptor<SaxiosRequest>
-export type SaxiosResponseInterceptor = SaxiosInterceptor<SaxiosResponse>

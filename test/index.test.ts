@@ -6,6 +6,8 @@ import { rest } from 'msw'
 
 const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
 // refs: https://t-yng.jp/post/msw-node18-error
 global.fetch = _fetch
 
@@ -107,6 +109,160 @@ describe('saxios', () => {
         expect(res.headers.get('content-type')).toEqual('application/octet-stream')
         expect(res.data.type).toEqual('application/octet-stream')
         expect(text).toEqual('foo')
+      })
+    })
+
+    describe('Interceptors', () => {
+      describe('request', () => {
+        describe('use', () => {
+          describe('fulfilled', () => {
+            test('sync', async () => {
+              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              saxios.interceptors.request.use(config => {
+                config.method = 'post'
+                return config
+              })
+
+              const res = await saxios.get('/')
+              expect(res.data).toEqual('POST /')
+            })
+
+            test('async', async () => {
+              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              saxios.interceptors.request.use(async config => {
+                config.method = 'patch'
+                await sleep(10)
+                return config
+              })
+
+              const res = await saxios.get('/')
+              expect(res.data).toEqual('PATCH /')
+            })
+          })
+
+          describe('rejected', () => {
+            test('sync', async () => {
+              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              saxios.interceptors.request.use(null, e => {
+                return Promise.reject('override')
+              })
+
+              await expect(saxios.request('/dummy')).rejects.toThrow('override')
+            })
+
+            test('async', async () => {
+              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              saxios.interceptors.request.use(null, async e => {
+                await sleep(10)
+                return Promise.reject('override')
+              })
+
+              await expect(saxios.request('/dummy')).rejects.toThrow('override')
+            })
+          })
+        })
+
+        describe('eject', () => {
+          test('eject all interceptors', () => {
+            const saxios = create()
+            const id1 = saxios.interceptors.request.use(config => config)
+            const id2 = saxios.interceptors.request.use(config => config)
+            const id3 = saxios.interceptors.request.use(config => config)
+
+            expect(saxios.interceptors.request.handlers).toHaveLength(3)
+
+            saxios.interceptors.request.eject(id1)
+            saxios.interceptors.request.eject(id3)
+
+            expect(saxios.interceptors.request.handlers).toHaveLength(1)
+            expect(saxios.interceptors.request.handlers[0].id).toEqual(id2)
+
+            saxios.interceptors.request.eject(id2)
+            expect(saxios.interceptors.request.handlers).toHaveLength(0)
+          })
+        })
+      })
+
+      describe('response', () => {
+        describe('use', () => {
+          describe('fulfilled', () => {
+            test('sync', async () => {
+              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              saxios.interceptors.response.use(response => {
+                response.data = 'override'
+                return response
+              })
+
+              const res = await saxios.get('/')
+              expect(res.data).toEqual('override')
+            })
+
+            test('async', async () => {
+              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              saxios.interceptors.response.use(async response => {
+                response.data = 'override'
+                await sleep(10)
+                return response
+              })
+
+              const res = await saxios.get('/')
+              expect(res.data).toEqual('override')
+            })
+          })
+
+          describe('rejected', () => {
+            function mockStatusCode(statusCode: number) {
+              server.use(
+                rest.get(`${MOCK_SERVER_BASE_URL}/`, (req, res, ctx) => {
+                  return res.once(ctx.status(statusCode), ctx.text('GET /'))
+                })
+              )
+            }
+
+            test('sync', async () => {
+              mockStatusCode(400)
+              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              saxios.interceptors.response.use(null, e => {
+                e.message = 'override'
+                throw e
+              })
+
+              await expect(saxios.request('/')).rejects.toThrow('override')
+            })
+
+            test('async', async () => {
+              mockStatusCode(500)
+              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              saxios.interceptors.response.use(null, async e => {
+                e.message = 'override'
+                await sleep(10)
+                throw e
+              })
+
+              await expect(saxios.request('/')).rejects.toThrow('override')
+            })
+          })
+
+          describe('eject', () => {
+            test('eject all interceptors', () => {
+              const saxios = create()
+              const id1 = saxios.interceptors.response.use(response => response)
+              const id2 = saxios.interceptors.response.use(response => response)
+              const id3 = saxios.interceptors.response.use(response => response)
+
+              expect(saxios.interceptors.response.handlers).toHaveLength(3)
+
+              saxios.interceptors.response.eject(id1)
+              saxios.interceptors.response.eject(id3)
+
+              expect(saxios.interceptors.response.handlers).toHaveLength(1)
+              expect(saxios.interceptors.response.handlers[0].id).toEqual(id2)
+
+              saxios.interceptors.response.eject(id2)
+              expect(saxios.interceptors.response.handlers).toHaveLength(0)
+            })
+          })
+        })
       })
     })
   })
