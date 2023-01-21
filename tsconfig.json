@@ -12,7 +12,7 @@
     "skipLibCheck": true,
     "noEmit": false,
     "declaration": true,
-    "emitDeclarationOnly": true,
+    "emitDeclarationOnly": false,
     "declarationMap": true,
     "declarationDir": "./dist",
     "moduleResolution": "node",

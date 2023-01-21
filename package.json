@@ -2,8 +2,17 @@
   "name": "saxios",
   "version": "0.0.1",
   "description": "Fetch wrapper like Axios API",
-  "main": "dist/index.js",
+  "source": "src/saxios.ts",
+  "main": "dist/saxios.js",
+  "umd:main": "dist/saxios.umd.js",
+  "module": "dist/saxios.module.js",
+  "types": "dist/saxios.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "microbundle",
+    "dev": "microbundle watch",
     "test": "vitest --reporter verbose",
     "lint": "eslint"
   },
@@ -21,6 +30,7 @@
     "@typescript-eslint/eslint-plugin": "^5.48.2",
     "@typescript-eslint/parser": "^5.48.2",
     "eslint": "^8.32.0",
+    "microbundle": "^0.15.1",
     "msw": "^0.49.2",
     "prettier": "^2.8.3",
     "tsx": "^3.12.2",
