@@ -11,7 +11,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "microbundle",
+    "build": "rm -rf dist/ & microbundle",
     "dev": "microbundle watch",
     "test": "vitest --reporter verbose",
     "lint": "eslint"
