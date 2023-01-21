@@ -318,6 +318,11 @@ describe('saxios', () => {
   })
 
   describe('Shortcut methods', () => {
+    test('#request', async () => {
+      const res = await saxios.request('/')
+      expect(res.data).toEqual('GET /')
+    })
+
     test('#get', async () => {
       const res = await saxios.get('/')
       expect(res.data).toEqual('GET /')
