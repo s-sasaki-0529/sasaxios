@@ -11,8 +11,8 @@ function createInterceptorManager<V>() {
     rejected: SasaxiosRejectedInterceptor
   }[] = []
 
-  function use(fulfilled: SasaxiosFulfilledInterceptor<V>, rejected?: SasaxiosRejectedInterceptor): number {
-    handlers.push({ id: currentIdIndex, fulfilled, rejected: rejected || null })
+  function use(fulfilled?: SasaxiosFulfilledInterceptor<V>, rejected?: SasaxiosRejectedInterceptor): number {
+    handlers.push({ id: currentIdIndex, fulfilled: fulfilled || null, rejected: rejected || null })
     return currentIdIndex++
   }
 
