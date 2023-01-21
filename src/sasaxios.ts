@@ -1,6 +1,6 @@
 import { parseResponseStream } from './nativeResponse'
 import { makeFullUrl } from './url'
-import { makeRequestBody } from './requestBody'
+import { isJSONContent, makeRequestBody } from './requestBody'
 import { SasaxiosRequest, SasaxiosResponse, SasaxiosURL } from './type'
 import { createRequestInterceptorManager, createResponseInterceptorManager } from './interceptor'
 export * from './type'
@@ -55,7 +55,14 @@ export function create(defaultRequestOption: SasaxiosRequest = {}) {
     const nativeRequestConfig: RequestInit = {
       method: options.method?.toUpperCase() || 'GET',
       body: makeRequestBody(options.data),
-      headers: options.headers,
+      headers: {
+        // TODO: support other format
+        'content-type':
+          !options.headers?.['content-type'] && isJSONContent(options.data)
+            ? 'application/json'
+            : options.headers?.['content-type'],
+        ...options.headers
+      },
       credentials: options.withCredentials ? 'include' : 'omit'
     }
 

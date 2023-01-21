@@ -68,6 +68,30 @@ describe('saxios', () => {
       })
     })
 
+    describe('Automatically set the Content-Type header based on the request body', () => {
+      test('if data is json object and Content-Type is not set', async () => {
+        const res = await saxios.post('/echo-content-type', { foo: 'bar' })
+        expect(res.data).toEqual('application/json')
+      })
+
+      test('if data is json object but Content-Type is set', async () => {
+        const res = await saxios.post(
+          '/echo-content-type',
+          { foo: 'bar' },
+          {
+            headers: { 'content-type': 'text/plain' }
+          }
+        )
+        expect(res.data).toEqual('text/plain')
+      })
+
+      test('if data is string and Content-Type is not set'),
+        async () => {
+          const res = await saxios.post('/echo-content-type', 'foo=bar')
+          expect(res.data).toEqual('text/plain')
+        }
+    })
+
     describe('Automatically parse the response based on the Content-Type', () => {
       function mockContentType(contentType: string, data: string) {
         server.use(

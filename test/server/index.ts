@@ -44,6 +44,12 @@ export const handlers: RestHandler[] = [
     return res(ctx.json(JSON.parse(JSON.stringify(headers))))
   }),
 
+  // echo request content-type endpoint
+  rest.all(`${MOCK_SERVER_BASE_URL}/echo-content-type`, (req, res, ctx) => {
+    const contentType = req.headers.get('content-type')
+    return res(ctx.text(contentType || ''))
+  }),
+
   // set cookie endpoint
   rest.all(`${MOCK_SERVER_BASE_URL}/set-cookie`, (req, res, ctx) => {
     return res(ctx.cookie('foo', 'bar'))
