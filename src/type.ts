@@ -3,7 +3,7 @@ export type SasaxiosHeaders = Record<string, string> | Headers
 
 export type SasaxiosRequest = {
   method?: 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options'
-  baseUrl?: string
+  baseURL?: string
   headers?: SasaxiosHeaders
   params?: Record<string, any> | URLSearchParams
   data?: any

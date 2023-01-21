@@ -4,7 +4,7 @@ import { MOCK_SERVER_BASE_URL, server } from './server'
 import _fetch from 'node-fetch'
 import { rest } from 'msw'
 
-const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+const saxios = create({ baseURL: MOCK_SERVER_BASE_URL })
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -133,7 +133,7 @@ describe('saxios', () => {
         describe('use', () => {
           describe('fulfilled', () => {
             test('sync', async () => {
-              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              const saxios = create({ baseURL: MOCK_SERVER_BASE_URL })
               saxios.interceptors.request.use(config => {
                 config.method = 'post'
                 return config
@@ -144,7 +144,7 @@ describe('saxios', () => {
             })
 
             test('async', async () => {
-              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              const saxios = create({ baseURL: MOCK_SERVER_BASE_URL })
               saxios.interceptors.request.use(async config => {
                 config.method = 'patch'
                 await sleep(10)
@@ -158,7 +158,7 @@ describe('saxios', () => {
 
           describe('rejected', () => {
             test('sync', async () => {
-              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              const saxios = create({ baseURL: MOCK_SERVER_BASE_URL })
               saxios.interceptors.request.use(null, e => {
                 return Promise.reject('override')
               })
@@ -167,7 +167,7 @@ describe('saxios', () => {
             })
 
             test('async', async () => {
-              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              const saxios = create({ baseURL: MOCK_SERVER_BASE_URL })
               saxios.interceptors.request.use(null, async e => {
                 await sleep(10)
                 return Promise.reject('override')
@@ -203,7 +203,7 @@ describe('saxios', () => {
         describe('use', () => {
           describe('fulfilled', () => {
             test('sync', async () => {
-              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              const saxios = create({ baseURL: MOCK_SERVER_BASE_URL })
               saxios.interceptors.response.use(response => {
                 response.data = 'override'
                 return response
@@ -214,7 +214,7 @@ describe('saxios', () => {
             })
 
             test('async', async () => {
-              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              const saxios = create({ baseURL: MOCK_SERVER_BASE_URL })
               saxios.interceptors.response.use(async response => {
                 response.data = 'override'
                 await sleep(10)
@@ -237,7 +237,7 @@ describe('saxios', () => {
 
             test('sync', async () => {
               mockStatusCode(400)
-              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              const saxios = create({ baseURL: MOCK_SERVER_BASE_URL })
               saxios.interceptors.response.use(null, e => {
                 e.message = 'override'
                 throw e
@@ -248,7 +248,7 @@ describe('saxios', () => {
 
             test('async', async () => {
               mockStatusCode(500)
-              const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+              const saxios = create({ baseURL: MOCK_SERVER_BASE_URL })
               saxios.interceptors.response.use(null, async e => {
                 e.message = 'override'
                 await sleep(10)
@@ -321,9 +321,9 @@ describe('saxios', () => {
   })
 
   describe('Request options', () => {
-    describe('baseUrl', () => {
+    describe('baseURL', () => {
       test('specified', async () => {
-        const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+        const saxios = create({ baseURL: MOCK_SERVER_BASE_URL })
         const res = await saxios.request('/')
         expect(res.data).toEqual('GET /')
       })

@@ -3,18 +3,18 @@ export type QueryString = Record<string, any> | URLSearchParams
 /**
  * make full URL that includes baseURL and query string
  */
-export function makeFullUrl(url: string, options?: { baseUrl?: string; params?: QueryString }) {
-  const { baseUrl, params } = options || {}
-  const fullUrl = insertBaseURL(url, baseUrl)
+export function makeFullUrl(url: string, options?: { baseURL?: string; params?: QueryString }) {
+  const { baseURL, params } = options || {}
+  const fullUrl = insertBaseURL(url, baseURL)
   return appendQueryString(fullUrl, params)
 }
 
 /**
  *  insert baseURL to URL if baseURL is specified
  */
-function insertBaseURL(url: string, baseUrl?: string) {
-  if (baseUrl) {
-    return new URL(url, baseUrl).toString()
+function insertBaseURL(url: string, baseURL?: string) {
+  if (baseURL) {
+    return new URL(url, baseURL).toString()
   }
   return url
 }

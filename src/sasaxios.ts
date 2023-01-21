@@ -42,7 +42,7 @@ export function create(defaultRequestOption: SasaxiosRequest = {}) {
    */
   async function request(url: SasaxiosURL, customOptions: SasaxiosRequest = {}): Promise<SasaxiosResponse> {
     let options = { ...defaultRequestOption, ...customOptions }
-    const fullUrl = makeFullUrl(url.toString(), { baseUrl: options.baseUrl, params: options.params })
+    const fullUrl = makeFullUrl(url.toString(), { baseURL: options.baseURL, params: options.params })
 
     // Call request interceptors before fetch
     for (const interceptor of requestInterceptor.handlers) {
