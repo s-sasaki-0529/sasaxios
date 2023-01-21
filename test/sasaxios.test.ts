@@ -379,12 +379,16 @@ describe('saxios', () => {
 
     describe('params', () => {
       test('object', async () => {
-        const res = await saxios.request('/echo-url', { params: { foo: 'bar', baz: 'qux' } })
-        expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
+        const res = await saxios.request('/echo-url', {
+          params: { foo: 'bar', baz: 'qux', null: null, undefined: undefined, zero: 0, empty: '' }
+        })
+        expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux&zero=0&empty=`)
       })
 
       test('URLSearchParams', async () => {
-        const res = await saxios.request('/echo-url', { params: new URLSearchParams({ foo: 'bar', baz: 'qux' }) })
+        const res = await saxios.request('/echo-url', {
+          params: new URLSearchParams({ foo: 'bar', baz: 'qux' })
+        })
         expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
       })
 
