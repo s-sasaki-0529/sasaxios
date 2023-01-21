@@ -75,7 +75,7 @@ export function create(defaultRequestOption: SasaxiosRequest = {}) {
             : options.headers?.['content-type'],
         ...options.headers
       },
-      credentials: options.withCredentials ? 'include' : 'omit'
+      credentials: options.withCredentials ? 'include' : 'same-origin'
     }
 
     try {

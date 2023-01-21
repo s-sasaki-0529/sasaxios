@@ -7,7 +7,7 @@ export type SasaxiosRequest = {
   headers?: SasaxiosHeaders
   params?: Record<string, any> | URLSearchParams
   data?: any
-  withCredentials?: boolean // NOTE: not supported same-origin
+  withCredentials?: boolean // NOTE: not supported 'omit'
 }
 export type SasaxiosResponse<T = any> = {
   data: T
