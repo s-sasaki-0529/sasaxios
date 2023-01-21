@@ -112,37 +112,37 @@ describe('saxios', () => {
   })
 
   describe('Shortcut methods', () => {
-    test('#get is available', async () => {
+    test('#get', async () => {
       const res = await saxios.get('/')
       expect(res.data).toEqual('GET /')
     })
 
-    test('#post is available', async () => {
+    test('#post', async () => {
       const res = await saxios.post('/', {})
       expect(res.data).toEqual('POST /')
     })
 
-    test('#put is available', async () => {
+    test('#put', async () => {
       const res = await saxios.put('/', {})
       expect(res.data).toEqual('PUT /')
     })
 
-    test('#patch is available', async () => {
+    test('#patch', async () => {
       const res = await saxios.patch('/', {})
       expect(res.data).toEqual('PATCH /')
     })
 
-    test('#delete is available', async () => {
+    test('#delete', async () => {
       const res = await saxios.delete('/')
       expect(res.data).toEqual('DELETE /')
     })
 
-    test('#head is available', async () => {
+    test('#head', async () => {
       const res = await saxios.head('/')
       expect(res.headers.get('x-test')).toEqual('HEAD /')
     })
 
-    test('#options is available', async () => {
+    test('#options', async () => {
       const res = await saxios.options('/')
       expect(res.data).toEqual('OPTIONS /')
     })
@@ -150,117 +150,117 @@ describe('saxios', () => {
 
   describe('Request options', () => {
     describe('baseUrl', () => {
-      test('no baseUrl', async () => {
-        const saxios = create()
-        const res = await saxios.request(`${MOCK_SERVER_BASE_URL}/`)
+      test('specified', async () => {
+        const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
+        const res = await saxios.request('/')
         expect(res.data).toEqual('GET /')
       })
 
-      test('with baseUrl', async () => {
-        const saxios = create({ baseUrl: MOCK_SERVER_BASE_URL })
-        const res = await saxios.request('/')
+      test('default(undefined)', async () => {
+        const saxios = create()
+        const res = await saxios.request(`${MOCK_SERVER_BASE_URL}/`)
         expect(res.data).toEqual('GET /')
       })
     })
 
     describe('method', () => {
-      test('GET', async () => {
+      test('get', async () => {
         const res = await saxios.request('/', { method: 'get' })
         expect(res.data).toEqual('GET /')
       })
 
-      test('POST', async () => {
+      test('post', async () => {
         const res = await saxios.request('/', { method: 'post' })
         expect(res.data).toEqual('POST /')
       })
 
-      test('PUT', async () => {
+      test('put', async () => {
         const res = await saxios.request('/', { method: 'put' })
         expect(res.data).toEqual('PUT /')
       })
 
-      test('PATCH', async () => {
+      test('patch', async () => {
         const res = await saxios.request('/', { method: 'patch' })
         expect(res.data).toEqual('PATCH /')
       })
 
-      test('DELETE', async () => {
+      test('delete', async () => {
         const res = await saxios.request('/', { method: 'delete' })
         expect(res.data).toEqual('DELETE /')
       })
 
-      test('HEAD', async () => {
+      test('head', async () => {
         const res = await saxios.request('/', { method: 'head' })
         expect(res.headers.get('x-test')).toEqual('HEAD /')
       })
 
-      test('OPTIONS', async () => {
+      test('options', async () => {
         const res = await saxios.request('/', { method: 'options' })
         expect(res.data).toEqual('OPTIONS /')
+      })
+
+      test('default(get)', async () => {
+        const res = await saxios.request('/')
+        expect(res.data).toEqual('GET /')
       })
     })
 
     describe('params', () => {
-      test('params is undefined', async () => {
-        const res = await saxios.request('/echo-url')
-        expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url`)
-      })
-
-      test('params is object', async () => {
+      test('object', async () => {
         const res = await saxios.request('/echo-url', { params: { foo: 'bar', baz: 'qux' } })
         expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
       })
 
-      test('params is URLSearchParams', async () => {
+      test('URLSearchParams', async () => {
         const res = await saxios.request('/echo-url', { params: new URLSearchParams({ foo: 'bar', baz: 'qux' }) })
         expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
       })
 
-      test('direct pass params to URL', async () => {
-        const res = await saxios.request('/echo-url?foo=bar&baz=qux')
-        expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
+      test('default(undefined)', async () => {
+        const res = await saxios.request('/echo-url')
+        expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url`)
       })
 
-      test('direct pass params with object params', async () => {
+      test('merging URL and params', async () => {
         const res = await saxios.request('/echo-url?foo=bar', { params: { baz: 'qux' } })
         expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
       })
     })
 
     describe('data', () => {
-      test('data is undefined', async () => {
-        const res = await saxios.post('/echo-body', undefined)
-        expect(res.data).toEqual('')
-      })
-
-      test('data is text/plain', async () => {
+      test('text/plain', async () => {
         const res = await saxios.post('/echo-body', 'foo', { headers: { 'content-type': 'text/plain' } })
         expect(res.data).toEqual('foo')
       })
 
-      test('data is application/json', async () => {
+      test('application/json', async () => {
         const res = await saxios.post('/echo-body', { foo: 'bar' }, { headers: { 'content-type': 'application/json' } })
         expect(res.data).toEqual('{"foo":"bar"}')
+      })
+
+      test('default(undefined)', async () => {
+        const res = await saxios.post('/echo-body', undefined)
+        expect(res.data).toEqual('')
       })
     })
 
     describe('headers', () => {
-      test('headers is undefined', async () => {
-        const res = await saxios.request('/echo-headers')
-        expect(res.data.foo).toBeUndefined()
-        expect(res.data.baz).toBeUndefined()
-      })
-
-      test('headers is object', async () => {
+      test('object', async () => {
         const res = await saxios.request('/echo-headers', { headers: { foo: 'bar', baz: 'qux' } })
         expect(res.data.foo).toEqual('bar')
         expect(res.data.baz).toEqual('qux')
       })
 
-      test('headers is Headers instance', async () => {
+      test('Headers', async () => {
         const res = await saxios.request('/echo-headers', { headers: new Headers({ foo: 'bar', baz: 'qux' }) })
         expect(res.data.foo).toEqual('bar')
         expect(res.data.baz).toEqual('qux')
+      })
+
+      test('default(undefined)', async () => {
+        const res = await saxios.request('/echo-headers')
+        expect(res.data.foo).toBeUndefined()
+        expect(res.data.baz).toBeUndefined()
       })
     })
 
@@ -275,6 +275,12 @@ describe('saxios', () => {
 
       test('false', async () => {
         await saxios.request('/set-cookie', { withCredentials: true })
+        const res = await saxios.request('/set-cookie', { withCredentials: true })
+        expect(res.headers.get('set-cookie')).toBeFalsy()
+      })
+
+      test('default(false)', async () => {
+        await saxios.request('/set-cookie')
         const res = await saxios.request('/set-cookie', { withCredentials: true })
         expect(res.headers.get('set-cookie')).toBeFalsy()
       })
