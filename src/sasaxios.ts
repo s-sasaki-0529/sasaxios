@@ -54,7 +54,7 @@ export function create(defaultRequestOption: SasaxiosRequest = {}) {
     // Transform saxios request to native fetch request
     const nativeRequestConfig: RequestInit = {
       method: options.method?.toUpperCase() || 'GET',
-      body: makeRequestBody(options.data, options.headers?.['content-type'] || ''),
+      body: makeRequestBody(options.data),
       headers: options.headers,
       credentials: options.withCredentials ? 'include' : 'omit'
     }

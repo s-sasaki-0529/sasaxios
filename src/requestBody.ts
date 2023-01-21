@@ -1,11 +1,11 @@
 /**
- * make request body data according to the content-type
+ * make request body data according to the format
  */
-export function makeRequestBody(data: any, contentType?: string) {
+export function makeRequestBody(data: any) {
   if (!data) return undefined
-  if (!contentType) return data.toString()
-  if (contentType.startsWith('text/')) return data.toString()
-
-  // TODO: support more content-type
-  return JSON.stringify(data)
+  if (typeof data === 'object' && typeof data.append !== 'function' && typeof data.text !== 'function') {
+    return JSON.stringify(data)
+  }
+  // TODO: support other format
+  return data
 }

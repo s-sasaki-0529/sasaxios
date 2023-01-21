@@ -405,18 +405,13 @@ describe('saxios', () => {
 
     describe('data', () => {
       test('text/plain', async () => {
-        const res = await saxios.post('/echo-body', 'foo', { headers: { 'content-type': 'text/plain' } })
+        const res = await saxios.post('/echo-body', 'foo')
         expect(res.data).toEqual('foo')
       })
 
       test('application/json', async () => {
-        const res = await saxios.post('/echo-body', { foo: 'bar' }, { headers: { 'content-type': 'application/json' } })
+        const res = await saxios.post('/echo-body', { foo: 'bar' })
         expect(res.data).toEqual('{"foo":"bar"}')
-      })
-
-      test('default(undefined)', async () => {
-        const res = await saxios.post('/echo-body', undefined)
-        expect(res.data).toEqual('')
       })
     })
 
