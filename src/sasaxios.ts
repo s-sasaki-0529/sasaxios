@@ -1,6 +1,6 @@
 import { parseResponseStream } from './nativeResponse'
 import { makeFullUrl } from './url'
-import { isJSONContent, makeRequestBody } from './requestBody'
+import { makeNativeRequestConfig, mergeOptions, setContentTypeHeader } from './request'
 import { SasaxiosRequest, SasaxiosResponse, SasaxiosURL } from './type'
 import { createRequestInterceptorManager, createResponseInterceptorManager } from './interceptor'
 export * from './type'
@@ -41,7 +41,7 @@ export function create(defaultRequestOption: SasaxiosRequest = {}) {
    * Call native fetch
    */
   async function request(url: SasaxiosURL, customOptions: SasaxiosRequest = {}): Promise<SasaxiosResponse> {
-    let options = { ...defaultRequestOption, ...customOptions }
+    let options = mergeOptions(defaultRequestOption, customOptions)
     const fullUrl = makeFullUrl(url.toString(), { baseURL: options.baseURL, params: options.params })
 
     // Call request interceptors before fetch
@@ -51,32 +51,9 @@ export function create(defaultRequestOption: SasaxiosRequest = {}) {
       }
     }
 
-    // Set default content-type
-    if (!options.headers) {
-      options.headers = {}
-    }
-    if (options.headers['content-type'] === undefined) {
-      if (isJSONContent(options.data)) {
-        options.headers['content-type'] = 'application/json'
-      } else {
-        options.headers['content-type'] = 'text/plain'
-      }
-    }
+    setContentTypeHeader(options)
 
-    // Transform saxios request to native fetch request
-    const nativeRequestConfig: RequestInit = {
-      method: options.method?.toUpperCase() || 'GET',
-      body: makeRequestBody(options.data),
-      headers: {
-        // TODO: support other format
-        'content-type':
-          !options.headers?.['content-type'] && isJSONContent(options.data)
-            ? 'application/json'
-            : options.headers?.['content-type'],
-        ...options.headers
-      },
-      credentials: options.withCredentials ? 'include' : 'same-origin'
-    }
+    const nativeRequestConfig = makeNativeRequestConfig(options)
 
     try {
       // Call native fetch
