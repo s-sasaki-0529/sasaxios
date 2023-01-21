@@ -18,18 +18,6 @@ export function mergeOptions(defaultOptions: SasaxiosRequest, customOptions: Sas
 }
 
 /**
- * make request body data according to the format
- */
-export function makeRequestBody(data: any) {
-  if (!data) return undefined
-  if (isJSONContent(data)) {
-    return JSON.stringify(data)
-  }
-  // TODO: support other format
-  return data
-}
-
-/**
  * Automatically set the content-type header
  */
 export function setContentTypeHeader(options: SasaxiosRequest) {
@@ -57,4 +45,16 @@ export function makeNativeRequestConfig(options: SasaxiosRequest): RequestInit {
 
 export const isJSONContent = (data: any) => {
   return typeof data === 'object' && typeof data.append !== 'function' && typeof data.text !== 'function'
+}
+
+/**
+ * make request body data according to the format
+ */
+export function makeRequestBody(data: any) {
+  if (!data) return undefined
+  if (isJSONContent(data)) {
+    return JSON.stringify(data)
+  }
+  // TODO: support other format
+  return data
 }
