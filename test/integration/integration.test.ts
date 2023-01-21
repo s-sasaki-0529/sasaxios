@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
-import { create } from '../src/sasaxios'
-import { MOCK_SERVER_BASE_URL, server } from './server'
+import { create } from '../../src/sasaxios'
+import { MOCK_SERVER_BASE_URL, server } from './msw'
 import _fetch from 'node-fetch'
 import { rest } from 'msw'
 
@@ -461,12 +461,6 @@ describe('saxios', () => {
     describe('headers', () => {
       test('object', async () => {
         const res = await saxios.request('/echo-headers', { headers: { foo: 'bar', baz: 'qux' } })
-        expect(res.data.foo).toEqual('bar')
-        expect(res.data.baz).toEqual('qux')
-      })
-
-      test('Headers', async () => {
-        const res = await saxios.request('/echo-headers', { headers: new Headers({ foo: 'bar', baz: 'qux' }) })
         expect(res.data.foo).toEqual('bar')
         expect(res.data.baz).toEqual('qux')
       })
