@@ -85,6 +85,14 @@ describe('saxios', () => {
         expect(res.data).toEqual({ foo: 'bar' })
       })
 
+      test('application/json;charset=utf-8', async () => {
+        mockContentType('application/json;charset=utf-8', '{"foo":"bar"}')
+
+        const res = await saxios.request('/')
+        expect(res.headers.get('content-type')).toEqual('application/json;charset=utf-8')
+        expect(res.data).toEqual({ foo: 'bar' })
+      })
+
       test('text/plain', async () => {
         mockContentType('text/plain', '{"foo":"bar"}')
 
@@ -98,6 +106,14 @@ describe('saxios', () => {
 
         const res = await saxios.request('/')
         expect(res.headers.get('content-type')).toEqual('text/html')
+        expect(res.data).toEqual('<html><body>foo</body></html>')
+      })
+
+      test('text/html;charset=utf-8', async () => {
+        mockContentType('text/html;charset=utf-8', '<html><body>foo</body></html>')
+
+        const res = await saxios.request('/')
+        expect(res.headers.get('content-type')).toEqual('text/html;charset=utf-8')
         expect(res.data).toEqual('<html><body>foo</body></html>')
       })
 
