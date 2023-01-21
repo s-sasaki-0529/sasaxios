@@ -12,7 +12,7 @@ $ npm install sasaxios
 
 or
 
-```
+```bash
 $ yarn add sasaxios
 ```
 
