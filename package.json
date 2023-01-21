@@ -2,11 +2,11 @@
   "name": "sasaxios",
   "version": "0.0.1",
   "description": "Fetch wrapper like Axios API",
-  "source": "src/saxios.ts",
-  "main": "dist/saxios.js",
-  "umd:main": "dist/saxios.umd.js",
-  "module": "dist/saxios.module.js",
-  "types": "dist/saxios.d.ts",
+  "source": "src/sasaxios.ts",
+  "main": "dist/sasaxios.js",
+  "umd:main": "dist/sasaxios.umd.js",
+  "module": "dist/sasaxios.module.js",
+  "types": "dist/sasaxios.d.ts",
   "files": [
     "dist"
   ],
@@ -18,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/s-sasaki-0529/saxios.git"
+    "url": "git+https://github.com/s-sasaki-0529/sasaxios.git"
   },
   "author": "s_sasaki_0529",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/s-sasaki-0529/saxios/issues"
+    "url": "https://github.com/s-sasaki-0529/sasaxios/issues"
   },
-  "homepage": "https://github.com/s-sasaki-0529/saxios#readme",
+  "homepage": "https://github.com/s-sasaki-0529/sasaxios#readme",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.48.2",
     "@typescript-eslint/parser": "^5.48.2",

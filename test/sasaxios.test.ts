@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
-import { create } from '../src/saxios'
+import { create } from '../src/sasaxios'
 import { MOCK_SERVER_BASE_URL, server } from './server'
 import _fetch from 'node-fetch'
 import { rest } from 'msw'

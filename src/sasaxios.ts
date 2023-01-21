@@ -1,33 +1,33 @@
 import { parseResponseStream } from './nativeResponse'
 import { makeFullUrl } from './url'
 import { makeRequestBody } from './requestBody'
-import { SaxiosRequest, SaxiosResponse, SaxiosURL } from './type'
+import { SasaxiosRequest, SasaxiosResponse, SasaxiosURL } from './type'
 import { createRequestInterceptorManager, createResponseInterceptorManager } from './interceptor'
 
-export function create(defaultRequestOption: SaxiosRequest = {}) {
+export function create(defaultRequestOption: SasaxiosRequest = {}) {
   /**
    * Shortcut methods
    */
   const shortcutMethods = {
-    get: (url: SaxiosURL, customOptions: SaxiosRequest = {}) => {
+    get: (url: SasaxiosURL, customOptions: SasaxiosRequest = {}) => {
       return request(url, { ...customOptions, method: 'get' })
     },
-    post: (url: SaxiosURL, data: any, customOptions: SaxiosRequest = {}) => {
+    post: (url: SasaxiosURL, data: any, customOptions: SasaxiosRequest = {}) => {
       return request(url, { ...customOptions, data, method: 'post' })
     },
-    put: (url: SaxiosURL, data: any, customOptions: SaxiosRequest = {}) => {
+    put: (url: SasaxiosURL, data: any, customOptions: SasaxiosRequest = {}) => {
       return request(url, { ...customOptions, data, method: 'put' })
     },
-    patch: (url: SaxiosURL, data: any, customOptions: SaxiosRequest = {}) => {
+    patch: (url: SasaxiosURL, data: any, customOptions: SasaxiosRequest = {}) => {
       return request(url, { ...customOptions, data, method: 'patch' })
     },
-    delete: (url: SaxiosURL, customOptions: SaxiosRequest = {}) => {
+    delete: (url: SasaxiosURL, customOptions: SasaxiosRequest = {}) => {
       return request(url, { ...customOptions, method: 'delete' })
     },
-    head: (url: SaxiosURL, customOptions: SaxiosRequest = {}) => {
+    head: (url: SasaxiosURL, customOptions: SasaxiosRequest = {}) => {
       return request(url, { ...customOptions, method: 'head' })
     },
-    options: (url: SaxiosURL, customOptions: SaxiosRequest = {}) => {
+    options: (url: SasaxiosURL, customOptions: SasaxiosRequest = {}) => {
       return request(url, { ...customOptions, method: 'options' })
     }
   }
@@ -39,7 +39,7 @@ export function create(defaultRequestOption: SaxiosRequest = {}) {
   /**
    * Call native fetch
    */
-  async function request(url: SaxiosURL, customOptions: SaxiosRequest = {}): Promise<SaxiosResponse> {
+  async function request(url: SasaxiosURL, customOptions: SasaxiosRequest = {}): Promise<SasaxiosResponse> {
     let options = { ...defaultRequestOption, ...customOptions }
     const fullUrl = makeFullUrl(url.toString(), { baseUrl: options.baseUrl, params: options.params })
 

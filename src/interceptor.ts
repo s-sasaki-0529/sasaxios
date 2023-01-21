@@ -1,17 +1,17 @@
-import { SaxiosRequest, SaxiosResponse } from './type'
+import { SasaxiosRequest, SasaxiosResponse } from './type'
 
-export type SaxiosFulfilledInterceptor<V> = ((value: V) => V | Promise<V>) | null
-export type SaxiosRejectedInterceptor = ((error: any) => any) | null
+export type SasaxiosFulfilledInterceptor<V> = ((value: V) => V | Promise<V>) | null
+export type SasaxiosRejectedInterceptor = ((error: any) => any) | null
 
 function createInterceptorManager<V>() {
   let currentIdIndex = 0
   const handlers: {
     id: number
-    fulfilled: SaxiosFulfilledInterceptor<V>
-    rejected: SaxiosRejectedInterceptor
+    fulfilled: SasaxiosFulfilledInterceptor<V>
+    rejected: SasaxiosRejectedInterceptor
   }[] = []
 
-  function use(fulfilled: SaxiosFulfilledInterceptor<V>, rejected?: SaxiosRejectedInterceptor): number {
+  function use(fulfilled: SasaxiosFulfilledInterceptor<V>, rejected?: SasaxiosRejectedInterceptor): number {
     handlers.push({ id: currentIdIndex, fulfilled, rejected: rejected || null })
     return currentIdIndex++
   }
@@ -36,9 +36,9 @@ function createInterceptorManager<V>() {
 }
 
 export function createRequestInterceptorManager() {
-  return createInterceptorManager<SaxiosRequest>()
+  return createInterceptorManager<SasaxiosRequest>()
 }
 
 export function createResponseInterceptorManager() {
-  return createInterceptorManager<SaxiosResponse>()
+  return createInterceptorManager<SasaxiosResponse>()
 }
