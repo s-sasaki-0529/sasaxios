@@ -14,7 +14,7 @@ export function makeFullUrl(url: string, options?: { baseURL?: string; params?: 
  */
 function insertBaseURL(url: string, baseURL?: string) {
   if (baseURL) {
-    return new URL(url, baseURL).toString()
+    return url.replace(/^(?!.*\/\/)\/?/, baseURL + '/')
   }
   return url
 }
