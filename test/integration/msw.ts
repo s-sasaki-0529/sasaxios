@@ -53,6 +53,11 @@ export const handlers: RestHandler[] = [
   // set cookie endpoint
   rest.all(`${MOCK_SERVER_BASE_URL}/set-cookie`, (req, res, ctx) => {
     return res(ctx.cookie('foo', 'bar'))
+  }),
+
+  // delay endpoint
+  rest.all(`${MOCK_SERVER_BASE_URL}/delay`, (req, res, ctx) => {
+    return res(ctx.delay(50), ctx.text('delayed response'))
   })
 ]
 

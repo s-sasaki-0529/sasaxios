@@ -500,11 +500,23 @@ describe('saxios', () => {
     })
 
     describe('signal', () => {
-      test('explicit abort', async () => {
+      test('can abort', async () => {
         const controller = new AbortController()
         const res = saxios.request('/', { signal: controller.signal })
         controller.abort()
         await expect(res).rejects.toThrow('The user aborted a request.')
+      })
+    })
+
+    describe('timeout', () => {
+      test('timeout value was set but completed in time', async () => {
+        const res = await saxios.request('/delay', { timeout: 1000 })
+        expect(res.data).toEqual('delayed response')
+      })
+
+      test('timeout value was set and occurred.', () => {
+        const res = saxios.request('/delay', { timeout: 1 })
+        return expect(res).rejects.toThrow('The user aborted a request.')
       })
     })
   })

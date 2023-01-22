@@ -14,7 +14,8 @@ export function mergeOptions(defaultOptions: SasaxiosRequest, customOptions: Sas
     params: customOptions.params ?? defaultOptions.params ?? undefined,
     data: customOptions.data ?? defaultOptions.data ?? undefined,
     withCredentials: customOptions.withCredentials ?? defaultOptions.withCredentials ?? false,
-    signal: customOptions.signal ?? defaultOptions.signal ?? undefined
+    signal: customOptions.signal ?? defaultOptions.signal ?? undefined,
+    timeout: customOptions.timeout ?? defaultOptions.timeout ?? undefined
   }
 }
 
@@ -36,12 +37,14 @@ export function setContentTypeHeader(options: SasaxiosRequest) {
  * Transform sasaxios request to native fetch request
  */
 export function makeNativeRequestConfig(options: SasaxiosRequest): RequestInit {
+  const abortControllerForTimeout = options.timeout ? createTimeoutAbortController(options.timeout) : undefined
+
   return {
     method: options.method?.toUpperCase() || 'GET',
     body: makeRequestBody(options.data),
     headers: options.headers,
     credentials: options.withCredentials ? 'include' : 'same-origin',
-    signal: options.signal
+    signal: options.signal || abortControllerForTimeout?.signal
   }
 }
 
@@ -59,4 +62,13 @@ export function makeRequestBody(data: any) {
   }
   // TODO: support other format
   return data
+}
+
+/**
+ * make AbortController that aborts after timeoutMs
+ */
+export function createTimeoutAbortController(timeoutMs: number) {
+  const controller = new AbortController()
+  setTimeout(() => controller.abort(), timeoutMs)
+  return controller
 }

@@ -9,6 +9,7 @@ export type SasaxiosRequest = {
   data?: any
   withCredentials?: boolean // NOTE: not supported 'omit'
   signal?: AbortSignal
+  timeout?: number
 }
 export type SasaxiosResponse<T = any> = {
   data: T
