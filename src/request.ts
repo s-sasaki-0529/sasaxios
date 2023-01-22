@@ -13,7 +13,8 @@ export function mergeOptions(defaultOptions: SasaxiosRequest, customOptions: Sas
     },
     params: customOptions.params ?? defaultOptions.params ?? undefined,
     data: customOptions.data ?? defaultOptions.data ?? undefined,
-    withCredentials: customOptions.withCredentials ?? defaultOptions.withCredentials ?? false
+    withCredentials: customOptions.withCredentials ?? defaultOptions.withCredentials ?? false,
+    signal: customOptions.signal ?? defaultOptions.signal ?? undefined
   }
 }
 
@@ -32,14 +33,15 @@ export function setContentTypeHeader(options: SasaxiosRequest) {
 }
 
 /**
- * Transform sasxios request to native fetch request
+ * Transform sasaxios request to native fetch request
  */
 export function makeNativeRequestConfig(options: SasaxiosRequest): RequestInit {
   return {
     method: options.method?.toUpperCase() || 'GET',
     body: makeRequestBody(options.data),
     headers: options.headers,
-    credentials: options.withCredentials ? 'include' : 'same-origin'
+    credentials: options.withCredentials ? 'include' : 'same-origin',
+    signal: options.signal
   }
 }
 

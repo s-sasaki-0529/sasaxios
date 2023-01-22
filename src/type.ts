@@ -8,6 +8,7 @@ export type SasaxiosRequest = {
   params?: Record<string, any> | URLSearchParams
   data?: any
   withCredentials?: boolean // NOTE: not supported 'omit'
+  signal?: AbortSignal
 }
 export type SasaxiosResponse<T = any> = {
   data: T

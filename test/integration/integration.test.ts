@@ -498,5 +498,14 @@ describe('saxios', () => {
         expect(res.headers.get('set-cookie')).toBeFalsy()
       })
     })
+
+    describe('signal', () => {
+      test('explicit abort', async () => {
+        const controller = new AbortController()
+        const res = saxios.request('/', { signal: controller.signal })
+        controller.abort()
+        await expect(res).rejects.toThrow('The user aborted a request.')
+      })
+    })
   })
 })
