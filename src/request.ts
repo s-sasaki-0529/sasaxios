@@ -12,6 +12,7 @@ export function mergeOptions(defaultOptions: SasaxiosRequest, customOptions: Sas
       ...customOptions.headers
     },
     params: customOptions.params ?? defaultOptions.params ?? undefined,
+    paramsSerializer: customOptions.paramsSerializer ?? defaultOptions.paramsSerializer ?? undefined,
     data: customOptions.data ?? defaultOptions.data ?? undefined,
     withCredentials: customOptions.withCredentials ?? defaultOptions.withCredentials ?? false,
     signal: customOptions.signal ?? defaultOptions.signal ?? undefined,

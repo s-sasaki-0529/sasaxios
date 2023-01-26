@@ -3,6 +3,7 @@ import Sasaxios from '../../src/sasaxios'
 import { MOCK_SERVER_BASE_URL, server } from './msw'
 import _fetch from 'node-fetch'
 import { rest } from 'msw'
+import qs from 'qs'
 
 const saxios = Sasaxios.create({ baseURL: MOCK_SERVER_BASE_URL })
 
@@ -448,6 +449,23 @@ describe('saxios', () => {
       test('merging URL and params', async () => {
         const res = await saxios.request('/echo-url?foo=bar', { params: { baz: 'qux' } })
         expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=qux`)
+      })
+    })
+
+    describe('paramsSerializer', () => {
+      test('specified', async () => {
+        const params = { foo: 'bar', baz: [1, 2, 3] }
+        const paramsSerializer = (params: any) => {
+          return qs.stringify(params, { arrayFormat: 'brackets', encodeValuesOnly: true })
+        }
+        const res = await saxios.request('/echo-url', { params, paramsSerializer })
+        expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz[]=1&baz[]=2&baz[]=3`)
+      })
+
+      test('default(URLSearchParams)', async () => {
+        const params = { foo: 'bar', baz: [1, 2, 3] }
+        const res = await saxios.request('/echo-url', { params })
+        expect(res.data).toEqual(`${MOCK_SERVER_BASE_URL}/echo-url?foo=bar&baz=1%2C2%2C3`)
       })
     })
 

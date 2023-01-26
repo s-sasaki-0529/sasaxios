@@ -6,6 +6,7 @@ export type SasaxiosRequest = {
   baseURL?: string
   headers?: SasaxiosHeaders
   params?: Record<string, any> | URLSearchParams
+  paramsSerializer?: (params: Record<string, any>) => string
   data?: any
   withCredentials?: boolean // NOTE: not supported 'omit'
   signal?: AbortSignal
