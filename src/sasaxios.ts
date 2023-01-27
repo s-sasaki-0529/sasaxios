@@ -68,8 +68,9 @@ function create(defaultRequestOption: SasaxiosRequest = {}) {
         config: customOptions
       }
 
-      // if native fetch is success but response status is not 2xx, throw error
-      if (!nativeResponse.ok) {
+      // if native fetch is success but response status is not valid, throw error
+      const isValidResponse = options.validateStatus ? options.validateStatus(nativeResponse.status) : nativeResponse.ok
+      if (!isValidResponse) {
         const errorInfo = {
           request: options,
           response: response,

@@ -16,7 +16,8 @@ export function mergeOptions(defaultOptions: SasaxiosRequest, customOptions: Sas
     data: customOptions.data ?? defaultOptions.data ?? undefined,
     withCredentials: customOptions.withCredentials ?? defaultOptions.withCredentials ?? false,
     signal: customOptions.signal ?? defaultOptions.signal ?? undefined,
-    timeout: customOptions.timeout ?? defaultOptions.timeout ?? undefined
+    timeout: customOptions.timeout ?? defaultOptions.timeout ?? undefined,
+    validateStatus: customOptions.validateStatus ?? defaultOptions.validateStatus ?? undefined
   }
 }
 

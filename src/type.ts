@@ -11,6 +11,7 @@ export type SasaxiosRequest = {
   withCredentials?: boolean // NOTE: not supported 'omit'
   signal?: AbortSignal
   timeout?: number
+  validateStatus?: (status: number) => boolean
 }
 export type SasaxiosResponse<T = any> = {
   data: T

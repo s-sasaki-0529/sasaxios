@@ -537,5 +537,27 @@ describe('saxios', () => {
         return expect(res).rejects.toThrow('The user aborted a request.')
       })
     })
+
+    describe('validateStatus', () => {
+      function mockStatusCode(statusCode: number) {
+        server.use(
+          rest.get(`${MOCK_SERVER_BASE_URL}/`, (req, res, ctx) => {
+            return res.once(ctx.status(statusCode), ctx.text('GET /'))
+          })
+        )
+      }
+
+      test('valid', async () => {
+        mockStatusCode(401)
+        const res = await saxios.request('/', { validateStatus: status => status === 401 })
+        expect(res.data).toEqual('GET /')
+      })
+
+      test('invalid', async () => {
+        mockStatusCode(200)
+        const res = saxios.request('/', { validateStatus: status => status === 401 })
+        await expect(res).rejects.toThrow('GET /')
+      })
+    })
   })
 })
